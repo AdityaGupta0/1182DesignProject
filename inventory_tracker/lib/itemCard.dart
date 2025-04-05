@@ -1,9 +1,9 @@
-import 'dart.io';
+//import 'dart.io';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+//import 'package:intl/intl.dart';
+//import 'package:cloud_functions/cloud_functions.dart';
 
 class itemCard extends StatefulWidget {
   final int itemId;
@@ -63,9 +63,9 @@ class _itemCardState extends State<itemCard> {
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                           onPressed: () async {
-                            await FirebaseFunctions.instance
-                                .httpsCallable('uidSignOut')
-                                .call({"uid": uid});
+                            //await FirebaseFunctions.instance
+                               //.httpsCallable('uidSignOut')
+                               //.call({"uid": uid});
                           },
                           child: const Text('Tare')),
                     ))
