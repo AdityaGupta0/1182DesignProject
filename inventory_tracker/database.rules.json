@@ -1,0 +1,22 @@
+{
+    "rules": {
+      ".read": "true",
+      ".write": "true",
+      "$itemId": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        "counter": {
+          ".write": "true"
+        },
+          "itemName": {
+          ".write": "true"
+        },
+        "itemQuantity": {
+          ".write": "true"
+        },
+        "threshold": {
+          ".write": "true"
+        }
+      }
+    }
+  }
