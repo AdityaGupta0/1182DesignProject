@@ -1,18 +1,18 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+//import 'package:intl/intl.dart';
 import 'package:inventory_tracker/itemCard.dart';
 import 'dart:ui';
 
 
-class dashBoard extends StatefulWidget {
-  const dashBoard({super.key});
+class Dashboard extends StatefulWidget {
+  const Dashboard({super.key});
 
   @override
-  State<dashBoard> createState() => _dashBoardState();
+  State<Dashboard> createState() => _dashBoardState();
 }
 
-class _dashBoardState extends State<dashBoard> {
+class _dashBoardState extends State<Dashboard> {
   DatabaseReference ref = FirebaseDatabase.instance.ref();
 
   List<itemCard> itemCards = [];
