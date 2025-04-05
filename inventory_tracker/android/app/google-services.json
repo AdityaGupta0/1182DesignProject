@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "671279718092",
+    "firebase_url": "https://inventory-tracker-1182-default-rtdb.firebaseio.com",
+    "project_id": "inventory-tracker-1182",
+    "storage_bucket": "inventory-tracker-1182.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671279718092:android:3a270bdcee9a6d770c2c69",
+        "android_client_info": {
+          "package_name": "com.example.inventory_tracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2XWZMaKnNbGa5pRgCN32V7zAl5C-N6u4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
