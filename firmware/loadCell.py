@@ -35,7 +35,7 @@ def main():
     
     try:
         while True:
-            weight = hx.get_data_mean() 
+            weight = hx.get_data_mean(10)  # Get the mean of 10 readings
             print(f"Weight: {weight} grams")
             time.sleep(0.1)  # Adjust the delay as needed
     except KeyboardInterrupt:
