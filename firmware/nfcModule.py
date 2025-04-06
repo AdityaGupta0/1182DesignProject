@@ -44,7 +44,7 @@ try:
                             ndef_message = payload[2:2 + ndef_length]  # Extract the NDEF message
                             if ndef_message[0] == 0xD1:  # Check for a well-known text record
                                 text_length = ndef_message[3]  # Length of the text
-                                text = ndef_message[5:5 + text_length]  # Extract and decode the text
+                                text = ndef_message[5:5 + text_length].decode('utf-8')  # Extract and decode the text
                                 print(f"Payload: {text}")
                             else:
                                 print(f"Unsupported NDEF message format. Raw data: {payload}")
