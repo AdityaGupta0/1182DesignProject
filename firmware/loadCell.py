@@ -1,5 +1,6 @@
 import time
 from hx711 import HX711  # Ensure you have the HX711 library installed
+#import RPi.GPIO as GPIO  # Ensure you have the RPi.GPIO library installed
 
 # Define GPIO pins for the HX711
 DT = 5  # Data pin (DT)
