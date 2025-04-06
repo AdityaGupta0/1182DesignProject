@@ -24,15 +24,24 @@ try:
         if uid is not None:
             print(f"Found an NFC tag with UID: {uid.hex()}")
 
-            # Attempt to read data from the tag
+            # Attempt to read 16 bytes of data (4 pages, 4 bytes each)
             try:
-                # Read 4-byte pages starting from page 4 (user data typically starts here)
-                for page in range(4, 8):  # Adjust the range as needed
-                    data = pn532.mifare_classic_read_block(page)
+                payload = b""  # Initialize an empty byte string to store the payload
+                for page in range(4, 8):  # Read pages 4 to 7 (16 bytes total)
+                    data = pn532.ntag2xx_read_page(page)
                     if data:
-                        print(f"Data on page {page}: {data.decode('utf-8').strip()}")
+                        payload += data  # Append the 4 bytes from the page to the payload
                     else:
                         print(f"Failed to read data from page {page}.")
+                        break
+
+                # Decode the payload as UTF-8
+                if payload:
+                    try:
+                        decoded_payload = payload.decode('utf-8').strip()
+                        print(f"Payload: {decoded_payload}")
+                    except UnicodeDecodeError:
+                        print(f"Failed to decode payload as UTF-8. Raw data: {payload}")
             except Exception as e:
                 print(f"Error reading data: {e}")
         else:
