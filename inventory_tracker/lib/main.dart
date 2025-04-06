@@ -53,13 +53,30 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: const Dashboard(),
-        );
-        /*
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: _addItem,
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-      */
+        ),
+
+        );
+
+  }
+
+  void _addItem() async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref();
+    int itemId = DateTime.now().millisecondsSinceEpoch;
+    await ref.child('items/$itemId').set({
+      'itemName': 'RiceBowlMutherfucker',
+      'itemQuantity': 10,
+      'threshold': 5,
+    });
+    
+    /*
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Item added!'),
+      ),
+    );
+    */
   }
 }

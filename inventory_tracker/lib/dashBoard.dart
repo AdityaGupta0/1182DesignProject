@@ -52,28 +52,27 @@ class _dashBoardState extends State<Dashboard> {
           )
       );
   }
-
   @override
   void initState() {
     super.initState();
-    
-    createUserCards();
-
+    listenForItemChanges();
   }
 
-  Future<void> createUserCards() async {
-    //DatabaseReference ref = FirebaseDatabase.instance.ref('items');
-    DataSnapshot snapshot = await ref.get();
-    Map<dynamic, dynamic> items = snapshot.value as Map<dynamic, dynamic>;
-    List<itemCard> cards = [];
+  void listenForItemChanges() {
+    ref.child('items').onValue.listen((DatabaseEvent event) {
+      final data = event.snapshot.value as Map<dynamic, dynamic>?;
 
-    items.forEach((key, value) {
-      int itemId = int.parse(key);
-      cards.add(itemCard(itemId: itemId));
-    });
+      if (data != null) {
+        List<itemCard> cards = [];
+        data.forEach((key, value) {
+          int itemId = int.parse(key);
+          cards.add(itemCard(itemId: itemId));
+        });
 
-    setState(() {
-      itemCards = cards;
+        setState(() {
+          itemCards = cards;
+        });
+      }
     });
   }
 }
