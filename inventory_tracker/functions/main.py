@@ -12,7 +12,7 @@ app = initialize_app()
 # def on_request_example(req: https_fn.Request) -> https_fn.Response:
 #     return https_fn.Response("Hello world!")
 
-def addItemToDatabase(item):
-    ref = db.reference('/items')
-    ref.push(item)
+#def addItemToDatabase(item):
+#    ref = db.reference('/items')
+#  ref.push(item)
     

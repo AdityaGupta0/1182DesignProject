@@ -68,9 +68,12 @@ class _dashBoardState extends State<Dashboard> {
           int itemId = int.parse(key);
           cards.add(itemCard(itemId: itemId));
         });
-
         setState(() {
           itemCards = cards;
+        });
+      } else {
+        setState(() {
+          itemCards = [];
         });
       }
     });

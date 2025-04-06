@@ -47,7 +47,7 @@ class _itemCardState extends State<itemCard> {
                     ? Colors.black
                     : Theme.of(context).colorScheme.onSurface),
             child: ExpansionTile(
-              title: Text('Item: $itemName',
+              title: Text('$itemName',
                   style: TextStyle(
                       color: (itemQuantity != null && itemQuantity! > threshold!)
                           ? Colors.black
@@ -58,17 +58,40 @@ class _itemCardState extends State<itemCard> {
                 Text('Threshold: $threshold'),
                 Text('Item ID: $itemId'),
                 Visibility(
-                    visible: itemQuantity == null,
+                    visible: itemQuantity != null,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                           onPressed: () async {
-                            //await FirebaseFunctions.instance
-                               //.httpsCallable('uidSignOut')
-                               //.call({"uid": uid});
+                            await ref.child('items/$itemId').update({
+                              'quantity': 100,
+                            });
                           },
                           child: const Text('Tare')),
-                    ))
+                    )),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        await ref.child('items/$itemId').update({
+                          'quantity': 0,
+                        });
+                      },
+                      child: const Text('Reset')),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        await ref.child('items/$itemId').remove();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Item Deleted'),
+                          ),
+                        );
+                      },
+                      child: const Text('Delete')),
+                ),
               ],
             ),
           ),
@@ -79,7 +102,7 @@ class _itemCardState extends State<itemCard> {
 
   void listenForChange() {
     FirebaseDatabase.instance
-        .ref('$itemId/state')
+        .ref('items/$itemId')
         .onValue
         .listen((DatabaseEvent event) {
       reload();
@@ -87,12 +110,12 @@ class _itemCardState extends State<itemCard> {
   }
 
   void reload() async {
-    DataSnapshot snapshot = await ref.child('$itemId').get();
+    DataSnapshot snapshot = await ref.child('items/$itemId').get();
     setState(() {
-      itemQuantity = int.parse(snapshot.child('quantity').value.toString());
-      threshold = int.parse(snapshot.child('threshold').value.toString());
-      itemId = int.parse(snapshot.child('itemId').value.toString());
-      itemName = snapshot.child('itemName').value.toString();
+      itemQuantity = int.tryParse(snapshot.child('quantity').value?.toString() ?? '0') ?? 0;
+      threshold = int.tryParse(snapshot.child('threshold').value?.toString() ?? '0') ?? 0;
+      itemId = int.tryParse(snapshot.key ?? '0') ?? 0;
+      itemName = snapshot.child('itemName').value?.toString() ?? 'Unknown Item';
     });
   }
 

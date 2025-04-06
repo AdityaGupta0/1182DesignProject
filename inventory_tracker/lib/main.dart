@@ -63,20 +63,70 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _addItem() async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref();
+    String? itemName;
+    int? threshold;
+
+    await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      final TextEditingController nameController = TextEditingController();
+      final TextEditingController thresholdController = TextEditingController();
+
+      return AlertDialog(
+        title: const Text('Add New Item'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(labelText: 'Item Name'),
+            ),
+            TextField(
+              controller: thresholdController,
+              decoration: const InputDecoration(labelText: 'Threshold'),
+              keyboardType: TextInputType.number,
+            ),
+            TextField(
+              controller: thresholdController,
+              decoration: const InputDecoration(labelText: 'balls'),
+              keyboardType: TextInputType.number,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog without saving
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              itemName = nameController.text;
+              threshold = int.tryParse(thresholdController.text);
+              Navigator.of(context).pop(); // Close the dialog and save input
+            },
+            child: const Text('Add'),
+          ),
+        ],
+      );
+    },
+  );
+  if (itemName != null && itemName!.isNotEmpty && threshold! > 0 && threshold ! < 100) {
     int itemId = DateTime.now().millisecondsSinceEpoch;
     await ref.child('items/$itemId').set({
-      'itemName': 'RiceBowlMutherfucker',
-      'itemQuantity': 10,
-      'threshold': 5,
+      'itemName': itemName,
+      'itemQuantity': 0, // Default quantity
+      'threshold': threshold,
     });
-    
-    /*
+
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Item added!'),
-      ),
+      const SnackBar(content: Text('Item added!')),
     );
-    */
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Invalid input. Item not added.')),
+    );
   }
+}
 }
