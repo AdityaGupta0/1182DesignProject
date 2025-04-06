@@ -19,7 +19,7 @@ print("Waiting for an NFC tag...")
 
 def extractId(payload):
     payload_str = str(payload)
-    xfe_pos = payload_str.find("\xfe")
+    xfe_pos = payload_str.find(b'\xfe')  # Find the position of '\xfe'
 
 
     if xfe_pos >= 13:  # Make sure there are at least 13 characters before '\xfe'
@@ -29,7 +29,7 @@ def extractId(payload):
         # Filter only digits from this section
         digits_only = ''.join(c for c in raw_section if c.isdigit())
         
-        # If we have exactly 12 digits, return them
+        # If we have exactly 13 digits, return them
         if len(digits_only) == 13:
             return digits_only
     
