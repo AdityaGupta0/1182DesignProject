@@ -35,13 +35,25 @@ try:
                         print(f"Failed to read data from page {page}.")
                         break
 
-                # Decode the payload as UTF-8
+                # Extract the number directly from the payload
                 if payload:
+                    # Extract the section from the payload that contains the number
+                    # Based on your sample output, the number appears to start around position 15
+                    # Extract a reasonable section that should contain the full number
                     try:
-                        decoded_payload = payload.decode('utf-8').strip()
-                        print(f"Payload: {decoded_payload}")
-                    except UnicodeDecodeError:
-                        print(f"Failed to decode payload as UTF-8. Raw data: {payload}")
+                        # Start at position 15 and read 12 characters
+                        payload_str = payload[15:35].decode('ascii', errors='ignore')
+                        # Clean the string to only contain digits
+                        number_only = ''.join(c for c in payload_str if c.isdigit())
+                        # Ensure we have at least 12 digits (your example number has 12 digits)
+                        if len(number_only) >= 12:
+                            print(number_only[:12])  # Print just the first 12 digits
+                        else:
+                            print(f"Could not extract number properly. Found: {number_only}")
+                            print(f"Raw data: {payload}")
+                    except Exception as e:
+                        print(f"Error extracting number: {e}")
+                        print(f"Raw data: {payload}")
             except Exception as e:
                 print(f"Error reading data: {e}")
         else:
