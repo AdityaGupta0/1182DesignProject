@@ -1,25 +1,33 @@
 import time
 import board
 import busio
-from adafruit_pn532.i2c import PN532_I2C
+from pn532pi import Pn532I2c, Pn532
 
-# I2C connection setup
-i2c = busio.I2C(board.SCL, board.SDA)
+i2c = Pn532I2c(1)
+nfc = Pn532(i2c)
 
-# Initialize the PN532 module
-pn532 = PN532_I2C(i2c, debug=False)
+if not nfc.begin():
+    print("Failed to initialize PN532 module. Check wiring and connections.")
+    exit()
 
-# Configure the PN532 to read MiFare cards
-pn532.SAM_configuration()
+
+version = nfc.getFirmwareVersion()
+if not version:
+    print("Failed to detect PN532. Check wiring and connections.")
+    exit()
+print(f"Found PN532 with firmware version: {hex(version)}")
+
+
+nfc.SAMConfig()  # Configure the PN532 for NFC tag reading
 
 print("Waiting for an NFC tag...")
 
 try:
     while True:
         # Check if a card is available to read
-        uid = pn532.read_passive_target(timeout=0.5)
-        if uid is not None:
-            print(f"Found an NFC tag with UID: {uid.hex()}")
+        success, uid = nfc.readPassiveTargetID(Pn532.MIFARE_ISO14443A)
+        if success:
+            print(f"Found an NFC tag with UID: {''.join([hex(i)[2:].zfill(2) for i in uid])}")
         else:
             print("No NFC tag detected.")
         time.sleep(0.5)  # Adjust the delay as needed
