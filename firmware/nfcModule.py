@@ -28,7 +28,7 @@ try:
             try:
                 # Read 4-byte pages starting from page 4 (user data typically starts here)
                 for page in range(4, 8):  # Adjust the range as needed
-                    data = pn532.ntag2xx_read_page(page)
+                    data = pn532.mifare_classic_read_block(page)
                     if data:
                         print(f"Data on page {page}: {data.decode('utf-8').strip()}")
                     else:
