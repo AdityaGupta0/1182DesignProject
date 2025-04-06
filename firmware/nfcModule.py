@@ -43,8 +43,10 @@ try:
                             ndef_length = payload[1]  # Length of the NDEF message
                             ndef_message = payload[2:2 + ndef_length]  # Extract the NDEF message
                             if ndef_message[0] == 0xD1:  # Check for a well-known text record
-                                text_length = ndef_message[3]  # Length of the text
-                                text = ndef_message[5:5 + text_length].decode('utf-8')  # Extract and decode the text
+                                language_code_length = ndef_message[4] & 0x3F  # Length of the language code
+                                text_start = 5 + language_code_length  # Start of the actual text
+                                text_length = ndef_message[3] - language_code_length  # Length of the text
+                                text = ndef_message[text_start:text_start + text_length].decode('utf-8')  # Extract and decode the text
                                 print(f"Payload: {text}")
                             else:
                                 print(f"Unsupported NDEF message format. Raw data: {payload}")
