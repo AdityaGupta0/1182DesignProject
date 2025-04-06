@@ -3,7 +3,7 @@ import time
 #import busio
 from pn532pi import Pn532I2c, Pn532
 
-i2c = Pn532I2c(1, 0x24)
+i2c = Pn532I2c(1)
 nfc = Pn532(i2c)
 
 if not nfc.begin():
