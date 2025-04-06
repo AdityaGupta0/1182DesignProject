@@ -11,7 +11,7 @@ def setup_hx711():
     Initialize the HX711 module.
     """
     hx = HX711(dout_pin=DT, pd_sck_pin=SCK)
-    hx.set_reading_format("MSB", "MSB")  # Set the byte order
+    #hx.set_reading_format("MSB", "MSB")  # Set the byte order
     hx.set_reference_unit(1)  # Set the reference unit (calibrate as needed)
     hx.reset()
     hx.tare()  # Tare the scale to zero
