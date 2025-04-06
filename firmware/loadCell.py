@@ -23,7 +23,8 @@ def main():
             dout_pin=DT,
             pd_sck_pin=SCK,
         )
-        hx.zero()  # Zero the scale
+        hx.reset()  # Reset the HX711
+        hx.zero(30)  # Zero the scale
     except ImportError:
         print("HX711 library not found. Please install it using 'pip install hx711'")
         return
