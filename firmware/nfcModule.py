@@ -17,6 +17,24 @@ pn532.SAM_configuration()
 
 print("Waiting for an NFC tag...")
 
+def extractId(payload):
+    payload_str = str(payload)
+    xfe_pos = payload_str.find("\xfe")
+
+
+    if xfe_pos >= 13:  # Make sure there are at least 13 characters before '\xfe'
+        # Extract characters before '\xfe'
+        raw_section = payload_str[xfe_pos-13:xfe_pos]
+        
+        # Filter only digits from this section
+        digits_only = ''.join(c for c in raw_section if c.isdigit())
+        
+        # If we have exactly 12 digits, return them
+        if len(digits_only) == 13:
+            return digits_only
+    
+    return None
+
 try:
     while True:
         # Check if a card is available to read
@@ -35,24 +53,13 @@ try:
                         print(f"Failed to read data from page {page}.")
                         break
 
-                # Extract the number directly from the payload
+                # Decode the payload as UTF-8
                 if payload:
-                    # Extract the section from the payload that contains the number
-                    # Based on your sample output, the number appears to start around position 15
-                    # Extract a reasonable section that should contain the full number
-                    try:
-                        # Start at position 15 and read 12 characters
-                        payload_str = payload[15:35].decode('ascii', errors='ignore')
-                        # Clean the string to only contain digits
-                        number_only = ''.join(c for c in payload_str if c.isdigit())
-                        # Ensure we have at least 12 digits (your example number has 12 digits)
-                        if len(number_only) >= 12:
-                            print(number_only[:12])  # Print just the first 12 digits
-                        else:
-                            print(f"Could not extract number properly. Found: {number_only}")
-                            print(f"Raw data: {payload}")
-                    except Exception as e:
-                        print(f"Error extracting number: {e}")
+                    id_number = extractId(payload)
+                    if id_number:
+                        print(id_number)
+                    else:
+                        print("Could not extract ID number")
                         print(f"Raw data: {payload}")
             except Exception as e:
                 print(f"Error reading data: {e}")
