@@ -23,7 +23,7 @@ def main():
             dout_pin=DT,
             pd_sck_pin=SCK,
         )
-        #hx.zero()  # Zero the scale
+        hx.zero()  # Zero the scale
     except ImportError:
         print("HX711 library not found. Please install it using 'pip install hx711'")
         return
@@ -35,8 +35,7 @@ def main():
     
     try:
         while True:
-            # Read the weight value
-            weight = hx.get_raw_data() 
+            weight = hx.get_data_mean() 
             print(f"Weight: {weight} grams")
             time.sleep(0.1)  # Adjust the delay as needed
     except KeyboardInterrupt:
