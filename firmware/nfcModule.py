@@ -1,6 +1,6 @@
 import time
-import board
-import busio
+#import board
+#import busio
 from pn532pi import Pn532I2c, Pn532
 
 i2c = Pn532I2c(1)
