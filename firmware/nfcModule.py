@@ -34,14 +34,23 @@ try:
                     else:
                         print(f"Failed to read data from page {page}.")
                         break
-
-                # Decode the payload as UTF-8
+                # Parse the NDEF message
                 if payload:
                     try:
-                        decoded_payload = payload.decode('utf-8').strip()
-                        print(f"Payload: {decoded_payload}")
-                    except UnicodeDecodeError:
-                        print(f"Failed to decode payload as UTF-8. Raw data: {payload}")
+                        # NDEF parsing
+                        if payload[0] == 0x03:  # NDEF message starts with 0x03
+                            ndef_length = payload[1]  # Length of the NDEF message
+                            ndef_message = payload[2:2 + ndef_length]  # Extract the NDEF message
+                            if ndef_message[0] == 0xD1:  # Check for a well-known text record
+                                text_length = ndef_message[3]  # Length of the text
+                                text = ndef_message[5:5 + text_length].decode('utf-8')  # Extract and decode the text
+                                print(f"Payload: {text}")
+                            else:
+                                print(f"Unsupported NDEF message format. Raw data: {payload}")
+                        else:
+                            print(f"Invalid NDEF message. Raw data: {payload}")
+                    except Exception as e:
+                        print(f"Error parsing NDEF message: {e}")
             except Exception as e:
                 print(f"Error reading data: {e}")
         else:
