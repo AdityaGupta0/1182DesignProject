@@ -19,7 +19,7 @@ print("Waiting for an NFC tag...")
 
 def extractId(payload):
     payload_str = str(payload)
-    xfe_pos = payload_str.find(b'\xfe')  # Find the position of '\xfe'
+    xfe_pos = payload_str.find('\\xfe')  # Find the position of '\xfe'
 
 
     if xfe_pos >= 13:  # Make sure there are at least 13 characters before '\xfe'
