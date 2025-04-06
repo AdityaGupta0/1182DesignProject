@@ -28,7 +28,7 @@ try:
             try:
                 payload = b""  # Initialize an empty byte string to store the payload
                 for page in range(4, 8):  # Read pages 4 to 7 (16 bytes total)
-                    data = pn532.ntag2xx_read_page(page)
+                    data = pn532.mifare_classic_read_block(page)
                     if data:
                         payload += data  # Append the 4 bytes from the page to the payload
                     else:
