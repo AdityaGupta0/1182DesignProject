@@ -12,7 +12,7 @@ else:
     print("Failed to detect PN532. Check wiring and connections.")
 
 
-# Configure the PN532 to read MiFare cards
+# Configure to read MiFare cards
 pn532.SAM_configuration()
 
 print("Waiting for an NFC tag...")
@@ -45,7 +45,7 @@ try:
             # Attempt to read 16 bytes of data (4 pages, 4 bytes each)
             try:
                 payload = b""  # Initialize an empty byte string to store the payload
-                for page in range(4, 8):  # Read pages 4 to 7 (16 bytes total)
+                for page in range(4, 8):  # reads 20 bytes of data (4 pages, 4 bytes each)
                     data = pn532.mifare_classic_read_block(page)
                     if data:
                         payload += data  # Append the 4 bytes from the page to the payload

@@ -9,9 +9,8 @@ SCK = 6  # Clock pin (SCK)
 
 
 def main():
-    """
-    Continuously read data from the HX711 and print it to the terminal.
-    """
+    #Continuously read data from the HX711 and print it to the terminal.
+
     try:
         # Initialize GPIO pins
         GPIO.setmode(GPIO.BCM)  # Use BCM pin numbering
@@ -26,7 +25,7 @@ def main():
         hx.reset()  # Reset the HX711
         hx.zero(30)  # Zero the scale
     except ImportError:
-        print("HX711 library not found. Please install it using 'pip install hx711'")
+        print("HX711 library not found.")
         return
     except Exception as e:
         print(f"Error initializing HX711: {e}")
@@ -38,12 +37,12 @@ def main():
         while True:
             weight = hx.get_data_mean(10)  # Get the mean of 10 readings
             print(f"Weight: {weight} grams")
-            time.sleep(0.1)  # Adjust the delay as needed
+            time.sleep(0.1) 
     except KeyboardInterrupt:
         print("\nExiting...")
     finally:
         hx.power_down()
-        GPIO.cleanup()  # Clean up GPIO settings if using RPi.GPIO
+        GPIO.cleanup() # Clean up GPIO settings
 
 if __name__ == "__main__":
     main()
