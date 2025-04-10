@@ -86,11 +86,6 @@ class _MyHomePageState extends State<MyHomePage> {
               decoration: const InputDecoration(labelText: 'Threshold'),
               keyboardType: TextInputType.number,
             ),
-            TextField(
-              controller: thresholdController,
-              decoration: const InputDecoration(labelText: 'balls'),
-              keyboardType: TextInputType.number,
-            ),
           ],
         ),
         actions: [
