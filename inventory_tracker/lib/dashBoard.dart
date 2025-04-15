@@ -25,7 +25,7 @@ class _dashBoardState extends State<Dashboard> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Column(children: <Widget>[
-              Text('Inventory Tracker',
+              Text('Items',
                   style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -61,21 +61,41 @@ class _dashBoardState extends State<Dashboard> {
   void listenForItemChanges() {
     ref.child('items').onValue.listen((DatabaseEvent event) {
       final data = event.snapshot.value as Map<dynamic, dynamic>?;
-
       if (data != null) {
         List<itemCard> cards = [];
         data.forEach((key, value) {
-          int itemId = int.parse(key);
-          cards.add(itemCard(itemId: itemId));
+          // Ensure the key can be parsed as an int
+          int? itemId = int.tryParse(key);
+          if (itemId != null) {
+            // Add a ValueKey using the unique itemId
+            cards.add(itemCard(key: ValueKey(itemId), itemId: itemId));
+          } else {
+            print("Warning: Could not parse item key '$key' as integer.");
+          }
         });
-        setState(() {
-          itemCards = cards;
-        });
+        // Optional: Sort cards if needed, e.g., by itemId or name from value
+        // cards.sort((a, b) => a.itemId.compareTo(b.itemId));
+
+        if (mounted) { // Check if widget is still mounted before calling setState
+          setState(() {
+            itemCards = cards;
+          });
+        }
       } else {
+         if (mounted) { // Check if widget is still mounted
+           setState(() {
+             itemCards = [];
+           });
+         }
+      }
+    }, onError: (error) {
+      // Handle potential errors from the stream
+      print("Error listening to items: $error");
+      if (mounted) {
         setState(() {
-          itemCards = [];
+          itemCards = []; // Clear cards on error or show an error message
         });
       }
     });
   }
-}
+  }

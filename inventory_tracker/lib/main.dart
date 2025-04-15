@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Inventory Tracker Home Page'),
+      home: const MyHomePage(title: 'Quantifi'),
     );
   }
 }
