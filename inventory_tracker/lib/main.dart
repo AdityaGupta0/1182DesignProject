@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Inventory Tracker Home Page'),
+      home: const MyHomePage(title: 'Quantifi'),
     );
   }
 }
@@ -86,11 +86,6 @@ class _MyHomePageState extends State<MyHomePage> {
               decoration: const InputDecoration(labelText: 'Threshold'),
               keyboardType: TextInputType.number,
             ),
-            TextField(
-              controller: thresholdController,
-              decoration: const InputDecoration(labelText: 'balls'),
-              keyboardType: TextInputType.number,
-            ),
           ],
         ),
         actions: [
@@ -117,6 +112,8 @@ class _MyHomePageState extends State<MyHomePage> {
     await ref.child('items/$itemId').set({
       'itemName': itemName,
       'itemQuantity': 0, // Default quantity
+      'maxQuant': 0, // Default max quantity
+      'currQuant': 0, // Default current quantity
       'threshold': threshold,
     });
 
