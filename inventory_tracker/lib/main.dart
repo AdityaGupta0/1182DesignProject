@@ -112,6 +112,8 @@ class _MyHomePageState extends State<MyHomePage> {
     await ref.child('items/$itemId').set({
       'itemName': itemName,
       'itemQuantity': 0, // Default quantity
+      'maxQuant': 0, // Default max quantity
+      'currQuant': 0, // Default current quantity
       'threshold': threshold,
     });
 

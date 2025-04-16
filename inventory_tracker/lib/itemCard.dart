@@ -19,8 +19,10 @@ class _itemCardState extends State<itemCard> {
   DatabaseReference ref = FirebaseDatabase.instance.ref();
   late int itemId;
   String? itemName;
-  int? itemQuantity;
+  int? maxQuant;
+  int? currQuant;
   int? threshold;
+  int? itemQuantity; // Added to store the quantity of the item
   // Add a StreamSubscription to manage the listener
   StreamSubscription<DatabaseEvent>? _itemSubscription;
 
@@ -41,11 +43,11 @@ class _itemCardState extends State<itemCard> {
   @override
   Widget build(BuildContext context) {
     // Show a loading indicator or placeholder if data hasn't loaded yet
-    if (itemName == null || itemQuantity == null || threshold == null) {
+    if (itemName == null || maxQuant == null || threshold == null || currQuant == null || itemQuantity == null) {
       // You might want a more sophisticated loading widget
       return const Card(child: Center(child: CircularProgressIndicator()));
     }
-
+    
     return Card(
       color: (itemQuantity! > threshold!) // Null check already happened
           ? Colors.green[600]
@@ -57,42 +59,74 @@ class _itemCardState extends State<itemCard> {
           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
           child: DefaultTextStyle(
             style: TextStyle(
-                color: (itemQuantity! > threshold!) // Null check already happened
+                color: (itemQuantity! > threshold!) 
                     ? Colors.black
                     : Theme.of(context).colorScheme.onSurface),
             child: ExpansionTile(
-              title: Text('$itemName', // Null check already happened
+              title: Text('$itemName', 
                   style: TextStyle(
-                      color: (itemQuantity! > threshold!) // Null check already happened
+                      fontSize: 20,
+                      color: (itemQuantity! > threshold!) 
                           ? Colors.black
                           : Theme.of(context).colorScheme.onSurface)),
+              subtitle: Text(itemQuantity != null 
+                  ? '$itemQuantity%'
+                  : 'Loading...'),
               children: <Widget>[
-                Text('Item: $itemName'),
-                Text('Quantity: $itemQuantity'),
-                Text('Threshold: $threshold'),
-                Text('Item ID: $itemId'),
+                Text('Threshold: $threshold',style: TextStyle(fontWeight: FontWeight.w500)),
+                Text('Absolute Quantity: $currQuant',style: TextStyle(fontWeight: FontWeight.w300)),
+                Text('Absolute max Quantity: $maxQuant', style: TextStyle(fontWeight: FontWeight.w300)),
+                Text('ID: $itemId' , style: TextStyle(fontWeight: FontWeight.w300)),
                 Visibility(
-                    visible: itemQuantity != null, // Keep this check for safety
+                    visible: itemQuantity != null, 
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                           onPressed: () async {
-                            await ref.child('items/$itemId').update({
-                              'itemQuantity': 100, // Corrected field name
-                            });
+                            // Check if currQuant is valid before updating
+                            if (currQuant != null && currQuant! >= 0) {
+                              try {
+                                await ref.child('items/$itemId').update({
+                                  // Set 'maxQuant' field to the current 'currQuant' value
+                                  'maxQuant': currQuant,
+                                });
+                                // Optional: Show feedback
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Max quantity tared!')),
+                                  );
+                                }
+                              } catch (e) {
+                                print("Error taring item $itemId: $e");
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Error taring item: $e')),
+                                  );
+                                }
+                              }
+                            } else {
+                              // Handle case where currQuant is null or invalid (optional)
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Cannot tare: Invalid current quantity.')),
+                                );
+                              }
+                            }
                           },
                           child: const Text('Tare')),
                     )),
+                /*    
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                       onPressed: () async {
                         await ref.child('items/$itemId').update({
-                          'itemQuantity': 0, // Corrected field name
+                          'itemQuantity': 0, 
                         });
                       },
                       child: const Text('Reset')),
                 ),
+                */
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
@@ -244,17 +278,27 @@ class _itemCardState extends State<itemCard> {
         final data = snapshot.value as Map<dynamic, dynamic>?; // Cast to Map
         if (data != null) {
           setState(() {
-            // Use data[] instead of snapshot.child()
-            itemQuantity = int.tryParse(data['itemQuantity']?.toString() ?? '0') ?? 0;
+            //itemQuantity = int.tryParse(data['itemQuantity']?.toString() ?? '0') ?? 0;
+            currQuant = int.tryParse(data['currQuant']?.toString() ?? '0') ?? 0;
+            maxQuant = int.tryParse(data['maxQuant']?.toString() ?? '0') ?? 0;
             threshold = int.tryParse(data['threshold']?.toString() ?? '0') ?? 0;
             // itemId = int.tryParse(snapshot.key ?? '0') ?? 0; // itemId doesn't change, remove this
             itemName = data['itemName']?.toString() ?? 'Unknown Item';
           });
+          if (maxQuant != null && maxQuant! > 0 && currQuant != null) {
+              // Ensure currQuant doesn't exceed maxQuant for percentage calculation
+              int effectiveCurrQuant = (currQuant! > maxQuant!) ? maxQuant! : currQuant!;
+              itemQuantity = (effectiveCurrQuant / maxQuant! * 100).toInt();
+            } else {
+              itemQuantity = 0; // Default to 0% if calculation isn't possible
+            }
         } else {
            // Handle case where data might be null unexpectedly, though snapshot.exists should prevent this
            if (mounted) {
              setState(() {
                itemName = 'Error Loading';
+               currQuant = 0;
+               maxQuant = 0;
                itemQuantity = 0;
                threshold = 0;
              });
@@ -267,6 +311,8 @@ class _itemCardState extends State<itemCard> {
        if (mounted) {
          setState(() {
            itemName = 'Error';
+           maxQuant = 0;
+           currQuant = 0;
            itemQuantity = 0;
            threshold = 0;
          });
