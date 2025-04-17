@@ -10,7 +10,7 @@ CRED_PATH = 'inventory-tracker-1182-firebase-adminsdk-fbsvc-4b8886cd39.json'
 # Replace with your Firebase Realtime Database URL
 DATABASE_URL = 'https://inventory-tracker-1182-default-rtdb.firebaseio.com'
 # Define the path in your database where you want to store the weight
-DB_WEIGHT_PATH = '/items/1744822927569'
+DB_WEIGHT_PATH = '/items/1744822927569/currQuant'
 
 try:
     cred = credentials.Certificate(CRED_PATH)
@@ -40,7 +40,7 @@ def main():
         time.sleep(0.5)
         print("Zeroing scale...")
         # Check if zeroing was successful
-        if not hx.zero(times=30):
+        if not hx.zero(30):
              print("Warning: Tare/Zeroing failed.")
         else:
              print("Scale zeroed successfully.")
