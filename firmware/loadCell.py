@@ -3,8 +3,8 @@ from hx711 import HX711  # Ensure you have the HX711 library installed
 import RPi.GPIO as GPIO  # Ensure you have the RPi.GPIO library installed
 
 # Define GPIO pins for the HX711
-DT = 8  # Data pin (DT)
-SCK = 7  # Clock pin (SCK)
+DT = 20  # Data pin (DT)
+SCK = 21  # Clock pin (SCK)
 
 
 
@@ -22,6 +22,7 @@ def main():
             dout_pin=DT,
             pd_sck_pin=SCK,
         )
+        time.sleep(0.5)  # Allow time for the HX711 to stabilize
         hx.reset()  # Reset the HX711
         hx.zero(30)  # Zero the scale
     except ImportError:
