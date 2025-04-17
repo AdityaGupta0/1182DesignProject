@@ -73,7 +73,7 @@ class _itemCardState extends State<itemCard> {
                   ? '$itemQuantity%'
                   : 'Loading...'),
               children: <Widget>[
-                Text('Threshold: $threshold',style: TextStyle(fontWeight: FontWeight.w500)),
+                Text('Threshold: $threshold%',style: TextStyle(fontWeight: FontWeight.w500)),
                 Text('Absolute Quantity: $currQuant',style: TextStyle(fontWeight: FontWeight.w300)),
                 Text('Absolute max Quantity: $maxQuant', style: TextStyle(fontWeight: FontWeight.w300)),
                 Text('ID: $itemId' , style: TextStyle(fontWeight: FontWeight.w300)),
@@ -280,7 +280,7 @@ class _itemCardState extends State<itemCard> {
             currQuant = int.tryParse(data['currQuant']?.toString() ?? '0') ?? 0;
             maxQuant = int.tryParse(data['maxQuant']?.toString() ?? '0') ?? 0;
             threshold = int.tryParse(data['threshold']?.toString() ?? '0') ?? 0;
-            // itemId = int.tryParse(snapshot.key ?? '0') ?? 0; // itemId doesn't change, remove this
+            // itemId = int.tryParse(snapshot.key ?? '0') ?? 0; 
             itemName = data['itemName']?.toString() ?? 'Unknown Item';
           });
           if (maxQuant != null && maxQuant! > 0 && currQuant != null) {

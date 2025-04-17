@@ -60,12 +60,12 @@ def main():
                 # Format weight to 2 decimal places
                 formatted_weight = round(weight, 2)
                 print(f"Weight: {formatted_weight} grams")
-
+                integer_weight = int(round(weight))
                 # --- Send data to Firebase via REST API ---
                 try:
                     # Use requests.put to overwrite data at the specified URL
                     # The data needs to be JSON encoded
-                    response = requests.put(FIREBASE_REST_URL, json=formatted_weight, timeout=5) # Added timeout
+                    response = requests.put(FIREBASE_REST_URL, json=integer_weight, timeout=5) # Added timeout
                     response.raise_for_status() # Raise an exception for bad status codes (4xx or 5xx)
                     # print("Weight sent to Firebase.") # Optional: uncomment for confirmation
                 except requests.exceptions.RequestException as e:
