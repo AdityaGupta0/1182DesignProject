@@ -8,7 +8,7 @@ try:
     GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
     # Create an object hx which represents your real hx711 chip
     # Required input parameters are only 'dout_pin' and 'pd_sck_pin'
-    hx = HX711(dout_pin=20, pd_sck_pin=21)
+    hx = HX711(dout_pin=19, pd_sck_pin=13)
     # measure tare and save the value as offset for current channel
     # and gain selected. That means channel A and gain 128
     hx.reset()
