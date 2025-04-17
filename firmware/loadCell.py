@@ -6,7 +6,7 @@ from firebase_admin import credentials, db # Import specific modules
 
 # --- Firebase Setup ---
 # Replace with the path to your downloaded service account key JSON file
-CRED_PATH = 'inventory-tracker-1182-firebase-adminsdk-fbsvc-4b8886cd39.json'
+CRED_PATH = '/home/adi/1182DesignProject/firmware/inventory-tracker-1182-firebase-adminsdk-fbsvc-4b8886cd39.json'
 # Replace with your Firebase Realtime Database URL
 DATABASE_URL = 'https://inventory-tracker-1182-default-rtdb.firebaseio.com'
 # Define the path in your database where you want to store the weight
