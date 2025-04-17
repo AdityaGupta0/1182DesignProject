@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import RPi.GPIO as GPIO  # import GPIO
 from hx711 import HX711  # import the class HX711
+import time
+import statistics
 
 try:
     GPIO.setmode(GPIO.BCM)  # set GPIO pin mode to BCM numbering
@@ -10,6 +12,7 @@ try:
     # measure tare and save the value as offset for current channel
     # and gain selected. That means channel A and gain 128
     hx.reset()
+    time.sleep(0.5)
     err = hx.zero(30)
     # check if successful
     if err:
