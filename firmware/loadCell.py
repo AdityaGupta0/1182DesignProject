@@ -3,8 +3,8 @@ from hx711 import HX711  # Ensure you have the HX711 library installed
 import RPi.GPIO as GPIO  # Ensure you have the RPi.GPIO library installed
 
 # Define GPIO pins for the HX711
-DT = 21  # Data pin (DT)
-SCK = 20  # Clock pin (SCK)
+DT = 8  # Data pin (DT)
+SCK = 7  # Clock pin (SCK)
 
 
 
