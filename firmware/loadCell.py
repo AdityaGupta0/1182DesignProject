@@ -1,30 +1,19 @@
 import time
 from hx711 import HX711  # Ensure you have the HX711 library installed
 import RPi.GPIO as GPIO  # Ensure you have the RPi.GPIO library installed
-import firebase_admin # Import Firebase library
-from firebase_admin import credentials, db # Import specific modules
+#import firebase_admin # Import Firebase library
+#from firebase_admin import credentials, db # Import specific modules
+import requests
 
-# --- Firebase Setup ---
-# Replace with the path to your downloaded service account key JSON file
-CRED_PATH = '/home/adi/1182DesignProject/firmware/inventory-tracker-1182-firebase-adminsdk-fbsvc-4b8886cd39.json'
+# --- Firebase REST API Setup ---
 # Replace with your Firebase Realtime Database URL
 DATABASE_URL = 'https://inventory-tracker-1182-default-rtdb.firebaseio.com'
-# Define the path in your database where you want to store the weight
-DB_WEIGHT_PATH = '/items/1744822927569/currQuant'
-
-try:
-    cred = credentials.Certificate(CRED_PATH)
-    firebase_admin.initialize_app(cred, {
-        'databaseURL': DATABASE_URL
-    })
-    # Get a reference to the database path
-    db_ref = db.reference(DB_WEIGHT_PATH)
-    print("Firebase Admin SDK initialized successfully.")
-except Exception as e:
-    print(f"Error initializing Firebase Admin SDK: {e}")
-    print("Firebase functionality will be disabled.")
-    db_ref = None # Set db_ref to None if initialization fails
-# --- End Firebase Setup ---
+# Define the path in your database where you want to store the weight, MUST end with .json for REST API
+DB_WEIGHT_PATH = '/items/1744822927569/currQuant.json'
+# Construct the full REST API endpoint URL
+FIREBASE_REST_URL = f"{DATABASE_URL}{DB_WEIGHT_PATH}"
+print(f"Firebase REST endpoint: {FIREBASE_REST_URL}")
+# --- End Firebase REST API Setup ---
 
 # Define GPIO pins for the HX711
 DT = 19  # Data pin (DT)
@@ -72,14 +61,17 @@ def main():
                 formatted_weight = round(weight, 2)
                 print(f"Weight: {formatted_weight} grams")
 
-                # --- Send data to Firebase ---
-                if db_ref: # Check if Firebase was initialized successfully
-                    try:
-                        db_ref.set(formatted_weight)
-                        # print("Weight sent to Firebase.") # Optional: uncomment for confirmation
-                    except Exception as e:
-                        print(f"Error sending data to Firebase: {e}")
+                # --- Send data to Firebase via REST API ---
+                try:
+                    # Use requests.put to overwrite data at the specified URL
+                    # The data needs to be JSON encoded
+                    response = requests.put(FIREBASE_REST_URL, json=formatted_weight, timeout=5) # Added timeout
+                    response.raise_for_status() # Raise an exception for bad status codes (4xx or 5xx)
+                    # print("Weight sent to Firebase.") # Optional: uncomment for confirmation
+                except requests.exceptions.RequestException as e:
+                    print(f"Error sending data to Firebase via REST: {e}")
                 # --- End Send data to Firebase ---
+
 
             else:
                 print("Invalid reading from HX711.")
