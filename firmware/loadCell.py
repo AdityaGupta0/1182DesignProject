@@ -55,7 +55,7 @@ def main():
     
     try:
         while True:
-            weight = hx.get_weight_mean(20)
+            weight = hx.get_weight_mean(5)
             if weight is not False:
                 # Format weight to 2 decimal places
                 formatted_weight = round(weight, 2)
