@@ -137,15 +137,13 @@ class _itemCardState extends State<itemCard> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                       onPressed: () async {
-                        // Cancel the listener first
                         await _itemSubscription?.cancel();
                         _itemSubscription = null; // Set to null after cancelling
-
                         //Then remove the item from the database
                         try {
                           await ref.child('items/$itemId').remove();
-                          //Show feedback (only if remove succeeds)
-                          if (mounted) { // Check if widget is still mounted
+                          //show feedback (only if remove succeeds)
+                          if (mounted) { //check if widget is still mounted
                              ScaffoldMessenger.of(context).showSnackBar(
                                const SnackBar(
                                  content: Text('Item Deleted'),
@@ -153,7 +151,7 @@ class _itemCardState extends State<itemCard> {
                              );
                           }
                         } catch (e) {
-                           // Handle potential errors during removal
+                           //handle potential errors during removal
                            print("Error removing item $itemId: $e");
                            if (mounted) {
                              ScaffoldMessenger.of(context).showSnackBar(
@@ -162,7 +160,7 @@ class _itemCardState extends State<itemCard> {
                                ),
                              );
                            }                        }
-                        // The Dashboard listener will handle removing the card UI element.
+                        //the Dashboard listener will handle removing the card UI element.
                       },
                       child: const Text('Delete')),
                 ),
