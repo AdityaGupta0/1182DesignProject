@@ -15,3 +15,10 @@ import statistics
 
 i2c = busio.I2C(board.SCL, board.SDA)
 tca = adafruit_tca9548a.TCA9548A(i2c)
+
+# Define GPIO pins for the HX711
+LC1 = HX711(dout_pin=20, pd_sck_pin=21)
+LC2 = HX711(dout_pin=19, pd_sck_pin=13)
+LC3 = HX711(dout_pin=5, pd_sck_pin=6)
+LC4 = HX711(dout_pin=9, pd_sck_pin=10)
+
