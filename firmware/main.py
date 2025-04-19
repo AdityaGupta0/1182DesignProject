@@ -46,6 +46,12 @@ LC3.set_scale_ratio(1027)
 LC4.set_scale_ratio(1080)
 time.sleep(0.1)
 
+load_cells = {
+    0: LC3,
+    1: LC2,
+    3: LC4
+}
+
 # --- Firebase REST API Setup ---
 DATABASE_URL = 'https://inventory-tracker-1182-default-rtdb.firebaseio.com'
 DB_ITEMS_PATH = '/items'
