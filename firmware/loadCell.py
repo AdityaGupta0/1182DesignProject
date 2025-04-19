@@ -16,8 +16,8 @@ print(f"Firebase REST endpoint: {FIREBASE_REST_URL}")
 # --- End Firebase REST API Setup ---
 
 # Define GPIO pins for the HX711
-DT = 19  # Data pin (DT)
-SCK = 13  # Clock pin (SCK)
+DT = 20  # Data pin (DT)
+SCK = 21  # Clock pin (SCK)
 
 def main():
     hx = None # Initialize hx to None
