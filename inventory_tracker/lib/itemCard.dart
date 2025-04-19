@@ -74,8 +74,8 @@ class _itemCardState extends State<itemCard> {
                   : 'Loading...'),
               children: <Widget>[
                 Text('Threshold: $threshold%',style: TextStyle(fontWeight: FontWeight.w500)),
-                Text('Absolute Quantity: $currQuant',style: TextStyle(fontWeight: FontWeight.w300)),
-                Text('Absolute max Quantity: $maxQuant', style: TextStyle(fontWeight: FontWeight.w300)),
+                Text('Absolute Quantity: $currQuant\g',style: TextStyle(fontWeight: FontWeight.w300)),
+                Text('Absolute max Quantity: $maxQuant\g', style: TextStyle(fontWeight: FontWeight.w300)),
                 Text('ID: $itemId' , style: TextStyle(fontWeight: FontWeight.w300)),
                 Visibility(
                     visible: itemQuantity != null, 
@@ -115,18 +115,6 @@ class _itemCardState extends State<itemCard> {
                           },
                           child: const Text('Tare')),
                     )),
-                /*    
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                      onPressed: () async {
-                        await ref.child('items/$itemId').update({
-                          'itemQuantity': 0, 
-                        });
-                      },
-                      child: const Text('Reset')),
-                ),
-                */
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(

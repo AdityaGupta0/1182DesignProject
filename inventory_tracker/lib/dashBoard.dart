@@ -25,7 +25,7 @@ class _dashBoardState extends State<Dashboard> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Column(children: <Widget>[
-              Text('Items',
+              Text('Dashboard',
                   style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

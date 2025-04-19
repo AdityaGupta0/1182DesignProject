@@ -18,7 +18,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,6 +26,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const MyHomePage(title: 'Quantifi'),
+      debugShowCheckedModeBanner: false, // Remove the debug banner hehehe
     );
   }
 }
@@ -111,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
     int itemId = DateTime.now().millisecondsSinceEpoch;
     await ref.child('items/$itemId').set({
       'itemName': itemName,
-      'itemQuantity': 0, // Default quantity
+      //'itemQuantity': 0, // Default quantity
       'maxQuant': 0, // Default max quantity
       'currQuant': 0, // Default current quantity
       'threshold': threshold,
